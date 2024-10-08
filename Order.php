@@ -35,7 +35,7 @@ class Order
             throw new Error('No more than ' . Order::$MAX_PRODUCT_PER_ORDER . ' products allowed');
         }
         $this->products = $products;
-        $this->totalPrice = count($products) * Order::$UNIQUE_PRODUCT_PRICE;
+        $this->totalPrice = $this->calculateTotalCart();
         if ($customerName === Order::$BLACKLISTED_CUSTOMER) {
             throw new Error('We don\'t serve rude people!');
         }
@@ -46,18 +46,26 @@ class Order
         echo "<br>Order n°{$this->id} created<br>";
     }
 
-    // Remove a product (5€ per product)
+    public function calculateTotalCart()
+    {
+        return count($this->products) * Order::$UNIQUE_PRODUCT_PRICE;
+    }
+
     public function removeProduct(string $product)
     {
         if (!in_array($product, $this->products)) {
             throw new Error('Sorry, this product is not in your cart');
         }
-        $key = array_search($product, $this->products);
-        unset($this->products[$key]);
-        $this->totalPrice -= Order::$UNIQUE_PRODUCT_PRICE;
+        $this->removeProductFromList($product);
+        $this->totalPrice = $this->calculateTotalCart();
     }
 
-    // Add a product (5€ per product)
+    public function removeProductFromList(string $product)
+    {
+        $key = array_search($product, $this->products);
+        unset($this->products[$key]);
+    }
+
     public function addProduct(string $product)
     {
         if (in_array($product, $this->products)) {
@@ -67,10 +75,9 @@ class Order
             throw new Error('You can\'t add a product to a cart that is already paid');
         }
         $this->products[] = $product;
-        $this->totalPrice += Order::$UNIQUE_PRODUCT_PRICE;
+        $this->totalPrice = $this->calculateTotalCart();
     }
 
-    // Shipping address (for country: choice between France, Belgium or Luxembourg)
     public function setShippingAddress(string $address, string $city, string $country)
     {
         if ($this->status !==  Order::$CART_STATUS) {
@@ -85,7 +92,6 @@ class Order
         $this->status =  Order::$SHIPPING_ADDRESS_SET_STATUS;
     }
 
-    // Shipping method (choice between Chronopost Express, relay point or at home)
     public function setShippingMethod(string $method)
     {
         if ($this->shippingAddress === null) {
@@ -101,7 +107,6 @@ class Order
         $this->status = Order::$SHIPPING_METHOD_SET_STATUS;
     }
 
-    // Pay
     public function pay()
     {
         if ($this->shippingMethod === null) {
@@ -109,8 +114,6 @@ class Order
         }
         $this->status = Order::$PAID_STATUS;
     }
-
-    // Status available: "CART", "SHIPPING_ADDRESS_SET", "SHIPPING_METHOD_SET" & "PAID"
 }
 
 
