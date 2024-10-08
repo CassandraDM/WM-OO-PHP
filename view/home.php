@@ -18,7 +18,7 @@
 
             <label for="products">Products</label>
 
-            <select name="products[]" id="product" multiple>
+            <select id="product" name="products[]" multiple>
                 <option value="tshirt">T-shirt</option>
                 <option value="jeans">Jeans</option>
                 <option value="shoes">Shoes</option>

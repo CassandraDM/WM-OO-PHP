@@ -11,6 +11,7 @@
     </header>
     <main>
         <p>Order created with success</p>
+        <a href="../view/set-shipping-address-form.php">Set Shipping Address</a>
     </main>
 </body>
 
