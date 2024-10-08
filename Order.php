@@ -6,6 +6,17 @@ error_reporting(E_ALL);
 
 class Order
 {
+    public static $CART_STATUS = 'CART';
+    public static $SHIPPING_ADDRESS_SET_STATUS = 'SHIPPING_ADDRESS_SET';
+    public static $SHIPPING_METHOD_SET_STATUS = 'SHIPPING_METHOD_SET';
+    public static $PAID_STATUS = 'PAID';
+    public static $MAX_PRODUCT_PER_ORDER = 5;
+    public static $BLACKLISTED_CUSTOMER = 'David Robert';
+    public static $UNIQUE_PRODUCT_PRICE = 5;
+    public static $AUTHORIZED_SHIPPING_COUNTRIES = ['France', 'Belgique', 'Luxembourg'];
+    public static $AVAILABLE_SHIPPING_METHODS = ['chronopost Express', 'point relais', 'domicile'];
+    public static $PAID_SHIPPING_METHOD = 'chronopost Express';
+    public static $PAID_SHIPPING_METHOD_COST = 5;
     private int $id;
     private array $products;
     private float $totalPrice;
@@ -20,17 +31,17 @@ class Order
     public function __construct(string $customerName, array $products)
     {
         $this->id = rand();
-        if (count($products) > 5) {
-            throw new Error('No more than 5 products allowed');
+        if (count($products) > Order::$MAX_PRODUCT_PER_ORDER) {
+            throw new Error('No more than ' . Order::$MAX_PRODUCT_PER_ORDER . ' products allowed');
         }
         $this->products = $products;
-        $this->totalPrice = count($products) * 5;
-        if ($customerName === 'David Robert') {
+        $this->totalPrice = count($products) * Order::$UNIQUE_PRODUCT_PRICE;
+        if ($customerName === Order::$BLACKLISTED_CUSTOMER) {
             throw new Error('We don\'t serve rude people!');
         }
         $this->customerName = $customerName;
         $this->createdAt = new DateTime();
-        $this->status = 'CART';
+        $this->status = Order::$CART_STATUS;
 
         echo "<br>Order n°{$this->id} created<br>";
     }
@@ -43,7 +54,7 @@ class Order
         }
         $key = array_search($product, $this->products);
         unset($this->products[$key]);
-        $this->totalPrice -= 5;
+        $this->totalPrice -= Order::$UNIQUE_PRODUCT_PRICE;
     }
 
     // Add a product (5€ per product)
@@ -52,26 +63,26 @@ class Order
         if (in_array($product, $this->products)) {
             throw new Error('This product is already in your cart');
         }
-        if ($this->status !== 'CART') {
+        if ($this->status !==  Order::$CART_STATUS) {
             throw new Error('You can\'t add a product to a cart that is already paid');
         }
         $this->products[] = $product;
-        $this->totalPrice += 5;
+        $this->totalPrice += Order::$UNIQUE_PRODUCT_PRICE;
     }
 
     // Shipping address (for country: choice between France, Belgium or Luxembourg)
     public function setShippingAddress(string $address, string $city, string $country)
     {
-        if ($this->status !== 'CART') {
+        if ($this->status !==  Order::$CART_STATUS) {
             throw new Error('You can\'t set a shipping address to a cart that is already paid');
         }
-        if (!in_array($country, ['France', 'Belgique', 'Luxembourg'])) {
+        if (!in_array($country, Order::$AUTHORIZED_SHIPPING_COUNTRIES)) {
             throw new Error('Sorry, we only deliver in France, Belgium and Luxembourg');
         }
         $this->shippingAddress = $address;
         $this->shippingCity = $city;
         $this->shippingCountry = $country;
-        $this->status = 'SHIPPING_ADDRESS_SET';
+        $this->status =  Order::$SHIPPING_ADDRESS_SET_STATUS;
     }
 
     // Shipping method (choice between Chronopost Express, relay point or at home)
@@ -80,11 +91,14 @@ class Order
         if ($this->shippingAddress === null) {
             throw new Error('You can\'t choose how you want to be delivered if we don\'t know where to deliver');
         }
-        if (!in_array($method, ['chronopost Express', 'point relais', 'domicile'])) {
+        if (!in_array($method, Order::$AVAILABLE_SHIPPING_METHODS)) {
             throw new Error('Sorry, we only deliver with Chronopost Express, in a relay point or at home');
         }
+        if ($this->shippingMethod === Order::$PAID_SHIPPING_METHOD) {
+            $this->totalPrice += Order::$PAID_SHIPPING_METHOD_COST;
+        }
         $this->shippingMethod = $method;
-        $this->status = 'SHIPPING_METHOD_SET';
+        $this->status = Order::$SHIPPING_METHOD_SET_STATUS;
     }
 
     // Pay
@@ -93,7 +107,7 @@ class Order
         if ($this->shippingMethod === null) {
             throw new Error('You can\'t pay a cart if we don\'t know how to deliver it');
         }
-        $this->status = 'PAID';
+        $this->status = Order::$PAID_STATUS;
     }
 
     // Status available: "CART", "SHIPPING_ADDRESS_SET", "SHIPPING_METHOD_SET" & "PAID"
