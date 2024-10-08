@@ -100,7 +100,7 @@ class Order
 }
 
 
-// Creating an order with John Doe
+// Test
 $order = new Order('John Doe', ['product1', 'product2', 'product3']);
 
 // Blacklisted name (David Robert)
