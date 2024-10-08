@@ -43,7 +43,7 @@ class Order
         $this->createdAt = new DateTime();
         $this->status = Order::$CART_STATUS;
 
-        echo "<br>Order n°{$this->id} created<br>";
+        // echo "<br>Order n°{$this->id} created<br>";
     }
 
     public function calculateTotalCart()
@@ -118,105 +118,75 @@ class Order
 
 
 // Test
-$order = new Order('John Doe', ['product1', 'product2', 'product3']);
+// $order = new Order('John Doe', ['product1', 'product2', 'product3']);
 
-// Blacklisted name (David Robert)
-try {
-    $order2 = new Order('David Robert', ['product1', 'product2', 'product3']);
-} catch (Error $e) {
-    echo $e->getMessage();
-}
+// // Blacklisted name (David Robert)
+// try {
+//     $order2 = new Order('David Robert', ['product1', 'product2', 'product3']);
+// } catch (Error $e) {
+//     echo $e->getMessage();
+// }
 
-?>
-</br>
-<?php
+// // More than 5 products in the order
+// try {
+//     $order3 = new Order('John Doe', ['product1', 'product2', 'product3', 'product4', 'product5', 'product6']);
+// } catch (Error $e) {
+//     echo $e->getMessage();
+// }
 
-// More than 5 products in the order
-try {
-    $order3 = new Order('John Doe', ['product1', 'product2', 'product3', 'product4', 'product5', 'product6']);
-} catch (Error $e) {
-    echo $e->getMessage();
-}
+// $order->removeProduct('product2');
 
-?>
-</br>
-<?php
+// // Removing a product that is not in the cart
+// try {
+//     $order->removeProduct('product2');
+// } catch (Error $e) {
+//     echo $e->getMessage();
+// }
 
-$order->removeProduct('product2');
+// $order->addProduct('product2');
 
-// Removing a product that is not in the cart
-try {
-    $order->removeProduct('product2');
-} catch (Error $e) {
-    echo $e->getMessage();
-}
+// // Adding a product that is already in the cart
+// try {
+//     $order->addProduct('product2');
+// } catch (Error $e) {
+//     echo $e->getMessage();
+// }
 
-?>
-</br>
-<?php
+// $order->setShippingAddress('1 rue de Paris', 'Paris', 'France');
 
-$order->addProduct('product2');
+// // Trying to set a shipping address outside France, Belgium, or Luxembourg
+// try {
+//     $order->setShippingAddress('1 rue de Paris', 'Paris', 'Espagne');
+// } catch (Error $e) {
+//     echo $e->getMessage();
+// }
 
-// Adding a product that is already in the cart
-try {
-    $order->addProduct('product2');
-} catch (Error $e) {
-    echo $e->getMessage();
-}
+// $order->setShippingMethod('chronopost Express');
 
-?>
-</br>
-<?php
+// // Shipping method without an address
+// try {
+//     $order->setShippingMethod('chronopost');
+// } catch (Error $e) {
+//     echo $e->getMessage();
+// }
 
-$order->setShippingAddress('1 rue de Paris', 'Paris', 'France');
+// $order->pay();
 
-// Trying to set a shipping address outside France, Belgium, or Luxembourg
-try {
-    $order->setShippingAddress('1 rue de Paris', 'Paris', 'Espagne');
-} catch (Error $e) {
-    echo $e->getMessage();
-}
+// $order2 = new Order('John Doe', ['product1', 'product2', 'product3']);
+// $order2->setShippingAddress('1 rue de Paris', 'Paris', 'France');
 
-?>
-</br>
-<?php
+// // Trying to pay without setting the shipping method
+// try {
+//     $order2->pay();
+// } catch (Error $e) {
+//     echo $e->getMessage();
+// }
 
-$order->setShippingMethod('chronopost Express');
+// $order3 = new Order('John Doe', ['product1', 'product2', 'product3']);
 
-// Shipping method without an address
-try {
-    $order->setShippingMethod('chronopost');
-} catch (Error $e) {
-    echo $e->getMessage();
-}
-
-$order->pay();
-
-?>
-</br>
-<?php
-
-$order2 = new Order('John Doe', ['product1', 'product2', 'product3']);
-$order2->setShippingAddress('1 rue de Paris', 'Paris', 'France');
-
-// Trying to pay without setting the shipping method
-try {
-    $order2->pay();
-} catch (Error $e) {
-    echo $e->getMessage();
-}
-
-?>
-</br>
-<?php
-
-$order3 = new Order('John Doe', ['product1', 'product2', 'product3']);
-
-// Trying to set the shipping method without setting the address first
-try {
-    $order3->setShippingMethod('chronopost Express');
-} catch (Error $e) {
-    echo $e->getMessage();
-}
-
-?>
+// // Trying to set the shipping method without setting the address first
+// try {
+//     $order3->setShippingMethod('chronopost Express');
+// } catch (Error $e) {
+//     echo $e->getMessage();
+// }
