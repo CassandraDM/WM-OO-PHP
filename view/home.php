@@ -13,7 +13,7 @@
         <form method="POST" action="../controller/create-order.php">
 
             <label for="customerName">Customer Name</label>
-            <input type="text" name="customerName" id="customerName" required>
+            <input type="text" name="customerName" id="customerName" minlength="2" maxlength="100" pattern="^(?=.*\S).{2,100}$" required>
             <br>
 
             <label for="products">Products</label>
