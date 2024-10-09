@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Shipping address set</title>
-</head>
-
-<body>
-    <header>
-        <h1>The Eshop at its best</h1>
-    </header>
-    <main>
-        <p>Shipping address set with success</p>
-    </main>
-</body>
-
-
-</html>
+<?php require_once('../view/partials/header.php'); ?>
+<main>
+    <p>Shipping address set with success</p>
+    <a href="../view/set-shipping-method.php">Continue</a>
+</main>
+<?php require_once('../view/partials/footer.php'); ?>

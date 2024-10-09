@@ -6,6 +6,11 @@ require_once 'inputValidation.php';
 session_start();
 
 try {
+    if (!isset($_POST['customerName']) || !isset($_POST['products'])) {
+        $errorMessage = "Would you mind filling the fields, thank you!";
+        require_once '../view/order-error.php';
+        return;
+    }
     $customerName = $_POST['customerName'];
     $products = $_POST['products'];
 
@@ -20,5 +25,11 @@ try {
     }
 } catch (Error $e) {
 
-    require_once ' ../view/order-error.php';
+    $errorMessage = $e->getMessage();
+    require_once '../view/order-error.php';
+}
+
+function persistOrder(Order $order)
+{
+    $_SESSION['order'] = $order;
 }

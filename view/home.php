@@ -1,36 +1,24 @@
-<!DOCTYPE html>
-<html>
+<?php require_once('../view/partials/header.php'); ?>
+<main>
+    <form method="POST" action="../controller/create-order.php">
 
-<head>
-    <title>The Eshop at its best</title>
-</head>
+        <label for="customerName">Customer Name</label>
+        <input type="text" name="customerName" id="customerName" minlength="2" maxlength="100" pattern="^(?=.*\S).{2,100}$" required>
+        <br>
 
-<body>
-    <header>
-        <h1>The Eshop at its best</h1>
-    </header>
-    <main>
-        <form method="POST" action="../controller/create-order.php">
+        <label for="products">Products</label>
 
-            <label for="customerName">Customer Name</label>
-            <input type="text" name="customerName" id="customerName" minlength="2" maxlength="100" pattern="^(?=.*\S).{2,100}$" required>
-            <br>
+        <select id="product" name="products[]" multiple>
+            <option value="tshirt">T-shirt</option>
+            <option value="jeans">Jeans</option>
+            <option value="shoes">Shoes</option>
+            <option value="shorts">Shorts</option>
+            <option value="cap">Cap</option>
+            <option value="sweatshirt">Sweatshirt</option>
+        </select>
+        <br>
 
-            <label for="products">Products</label>
-
-            <select id="product" name="products[]" multiple>
-                <option value="tshirt">T-shirt</option>
-                <option value="jeans">Jeans</option>
-                <option value="shoes">Shoes</option>
-                <option value="shorts">Shorts</option>
-                <option value="cap">Cap</option>
-                <option value="sweatshirt">Sweatshirt</option>
-            </select>
-            <br>
-
-            <button type="submit">Add</button>
-        </form>
-    </main>
-</body>
-
-</html>
+        <button type="submit">Add</button>
+    </form>
+</main>
+<?php require_once('../view/partials/footer.php'); ?>
