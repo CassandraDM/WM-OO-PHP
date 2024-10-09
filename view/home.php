@@ -1,4 +1,4 @@
-<?php require_once('../view/partials/header.php'); ?>
+<?php require_once './view/partials/header.php'; ?>
 <main>
     <form method="POST" action="../controller/create-order.php">
 
@@ -21,4 +21,4 @@
         <button type="submit">Add</button>
     </form>
 </main>
-<?php require_once('../view/partials/footer.php'); ?>
+<?php require_once './view/partials/footer.php'; ?>
